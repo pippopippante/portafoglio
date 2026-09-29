@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il mio portafoglio</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #1d3cb8; --on-page: #fff; --on-page-2: #c9d3ff;
+    --paper: #fff; --ink: #0c1541; --ink-2: #4b5479; --ink-3: #a3aac6; --rule: #d9dcea;
+    --etf: #ffc81e; --azioni: #ff7a45; --crypto: #b89cff; --venduti: #cdd1de;
+    --up: #0b7a35; --down: #c42b2b;
+    --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+    --text: Barlow, system-ui, sans-serif;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+    --lift: 0 1px 1px rgba(5, 12, 50, .25), 0 10px 22px -10px rgba(5, 12, 50, .65);
+  }
+  * { box-sizing: border-box; }
+  html { scrollbar-color: #7f93f0 var(--page); }
+  body {
+    margin: 0; color: var(--on-page); font: 16px/1.5 var(--text);
+    background: var(--page) radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1.5px) 0 0 / 7px 7px;
+  }
+  ::selection { background: var(--etf); color: var(--ink); }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--etf); outline-offset: 4px; border-radius: 4px; }
+  main { max-width: 1080px; margin: 0 auto; padding: clamp(28px, 6vw, 64px) 16px 72px; }
+  h1, h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; margin: 0; }
+  h1 { font-size: clamp(52px, 10vw, 96px); line-height: .86; letter-spacing: -.01em; text-wrap: balance; }
+  .lede { color: var(--on-page-2); max-width: 38ch; margin: 18px 0 0; font-size: 17px; }
+  .up { color: var(--up); } .down { color: var(--down); }
+
+  /* pannelli stampati dell'album */
+  .card { background: var(--paper); color: var(--ink); border-radius: 6px; padding: 20px 22px; box-shadow: var(--lift); }
+  .card h2 { font-size: 24px; line-height: 1; margin-bottom: 12px; }
+  .facts { margin: 0; font-variant-numeric: tabular-nums; }
+  .facts div { display: flex; align-items: baseline; gap: 8px; padding: 4px 0; }
+  .facts dt { flex: 1; display: flex; gap: 8px; color: var(--ink-2); }
+  .facts dt::after { content: ""; flex: 1; border-bottom: 2px dotted var(--rule); transform: translateY(-5px); }
+  .facts dd { margin: 0; font-weight: 600; text-align: right; }
+
+  .cover { display: grid; grid-template-columns: 1fr minmax(280px, 380px); gap: 32px 48px; align-items: end; margin-bottom: 56px; }
+
+  /* squadre e figurine */
+  .band {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    background: var(--team); color: var(--ink); font-size: 30px; line-height: 1; padding: 10px 16px 9px; border-radius: 4px; margin-bottom: 24px;
+  }
+  .band small { font: 600 15px var(--text); text-transform: none; white-space: nowrap; }
+  /* squadre piccole affiancate come in una pagina d'album: ogni squadra occupa tante colonne quante figurine (max 4) */
+  #album { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 24px; }
+  .team { grid-column: span var(--n4); min-width: 0; }
+  .grid { display: grid; grid-template-columns: repeat(var(--n4), 1fr); gap: 32px 24px; margin-bottom: 56px; }
+  .sticker {
+    position: relative; display: flex; flex-direction: column; text-decoration: none;
+    background: var(--paper); color: var(--ink); border-radius: 8px; padding: 7px; box-shadow: var(--lift);
+    transform: rotate(var(--tilt, 0deg));
+    transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+  }
+  a.sticker:hover { transform: translateY(-5px) rotate(0deg); box-shadow: 0 2px 2px rgba(5, 12, 50, .25), 0 22px 34px -12px rgba(5, 12, 50, .75); }
+  .enter .sticker { animation: stick .55s var(--ease) backwards; animation-delay: calc(var(--i) * 50ms); }
+  @keyframes stick { from { transform: translateY(-14px) rotate(calc(var(--tilt, 0deg) - 5deg)) scale(1.05); box-shadow: 0 28px 44px -14px rgba(5, 12, 50, .7); } }
+  .field { position: relative; display: block; aspect-ratio: 5 / 4; background: var(--team); border-radius: 4px; overflow: hidden; }
+  .sold .field { background: var(--venduti); }
+  .no { position: absolute; top: 5px; left: 9px; font: 800 38px/1 var(--display); letter-spacing: -.02em; }
+  .field svg { position: absolute; left: 0; bottom: 0; width: 100%; height: 58%; }
+  .field .area { fill: rgba(12, 21, 65, .14); }
+  .field .line { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .field .avg { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 3 3; opacity: .5; vector-effect: non-scaling-stroke; }
+  .stamp {
+    position: absolute; top: 10px; right: 9px; transform: rotate(-9deg);
+    border: 2px solid var(--ink); border-radius: 3px; padding: 3px 6px 2px; font: 800 15px/1 var(--display); letter-spacing: .08em;
+  }
+  .plate { display: block; margin-top: 7px; padding: 7px 9px 8px; background: var(--ink); color: #fff; border-radius: 3px; }
+  .plate b { display: block; font: 800 21px/1 var(--display); text-transform: uppercase; letter-spacing: .01em; }
+  .plate small { display: block; margin-top: 3px; font-size: 12px; letter-spacing: .05em; color: #aeb7de; }
+  .nums { display: flex; justify-content: space-between; gap: 8px; margin-top: auto; padding: 8px 3px 1px; font-size: 15px; font-variant-numeric: tabular-nums; }
+  .nums span { font-weight: 600; } .nums span + span { font-weight: 700; }
+
+  /* scheda del singolo titolo */
+  .back { display: inline-flex; align-items: center; gap: 8px; color: var(--on-page-2); text-decoration: none; font-weight: 600; margin-bottom: 28px; }
+  .back:hover { color: var(--on-page); }
+  .d-head { display: grid; grid-template-columns: minmax(220px, 290px) 1fr; gap: 32px 48px; align-items: center; margin-bottom: 40px; }
+  #d-sticker .sticker { view-transition-name: sticker; --tilt: -2deg; }
+  #d-sticker .no { font-size: 54px; }
+  #d-sticker .plate b { font-size: 30px; }
+  #d-sticker .nums { font-size: 17px; }
+  .d-sub { color: var(--on-page-2); margin: 14px 0 0; }
+  .d-since { font: 800 22px/1.1 var(--display); text-transform: uppercase; margin: 10px 0 22px; }
+  .sheet { margin-bottom: 28px; overflow-x: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--ink-2); font-size: 14px; margin-bottom: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend i { width: 20px; border-top: 2.5px solid var(--ink); }
+  .legend i.avg { border-top: 1.5px dashed var(--ink-2); }
+  .legend i.hold { height: 13px; border: 0; background: var(--team); }
+  .plot { position: relative; height: 380px; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 11px 8px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--rule); }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--ink-2); font-weight: 500; font-size: 13px; }
+  tr:last-child td { border-bottom: 0; }
+  .sale td { font-weight: 600; }
+  #error { background: var(--paper); color: var(--down); padding: 16px; border-radius: 6px; }
+
+  @media (max-width: 720px) {
+    .cover, .d-head { grid-template-columns: 1fr; }
+    #album { grid-template-columns: repeat(2, 1fr); gap: 0 16px; }
+    .team { grid-column: span var(--n2); }
+    .grid { grid-template-columns: repeat(var(--n2), 1fr); gap: 24px 16px; }
+    .band { font-size: 22px; padding: 8px 10px 7px; }
+    .band small { font-size: 13px; }
+    th, td { padding: 10px 4px; font-size: 14px; }
+    .sheet { padding: 16px 12px; }
+    .sale td:first-child { white-space: normal; }
+    th:nth-child(2), td:nth-child(2) { display: none; } /* su telefono niente colonna Quote (è una stima) */
+    #d-sticker { width: min(62%, 260px); margin: 0 auto; }
+    .plot { height: 300px; }
+    .card { padding: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .enter .sticker { animation: none; }
+    .sticker { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p id="error" hidden></p>
+
+  <section id="overview">
+    <header class="cover">
+      <div>
+        <h1>Il mio portafoglio</h1>
+        <p class="lede">Tocca una figurina per vedere come è andata da quando l'hai presa.</p>
+      </div>
+      <div class="card" id="totals"></div>
+    </header>
+    <div id="album"></div>
+  </section>
+
+  <section id="detail" hidden>
+    <a class="back" href="#">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3 5 9l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Torna all'album
+    </a>
+    <div class="d-head">
+      <div id="d-sticker"></div>
+      <div>
+        <h1 id="d-name"></h1>
+        <p class="d-sub" id="d-sub"></p>
+        <p class="d-since" id="d-since"></p>
+        <div class="card"><dl class="facts" id="d-facts"></dl></div>
+      </div>
+    </div>
+    <div class="card sheet" id="d-chart-card">
+      <div class="legend">
+        <span><i></i>Prezzo</span>
+        <span><i class="avg"></i><span id="d-avg-label"></span></span>
+        <span><i class="hold"></i>Periodo di possesso</span>
+      </div>
+      <div class="plot"><canvas id="chart" role="img"></canvas></div>
+    </div>
+    <div class="card sheet">
+      <h2>Movimenti</h2>
+      <table>
+        <thead><tr><th>Data</th><th>Quote</th><th>Prezzo</th><th>Importo</th><th id="d-since-col">Da allora</th></tr></thead>
+        <tbody id="d-buys"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => `&#${c.charCodeAt(0)};`);
+const money = (v, cur, sign) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: cur, useGrouping: 'always', signDisplay: sign ? 'exceptZero' : 'auto' }).format(v);
+const pct = v => new Intl.NumberFormat('it-IT', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: 'exceptZero' }).format(v / 100);
+const num = v => new Intl.NumberFormat('it-IT', { maximumFractionDigits: v < 1 ? 6 : 4 }).format(v);
+const day = d => new Date(d).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' });
+const cls = v => v >= 0 ? 'up' : 'down';
+const sum = a => a.reduce((x, y) => x + y, 0);
+const css = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+
+// indice dell'ultima seduta <= data (se compri di sabato vale il venerdì)
+const idxOn = (pts, date) => Math.max(0, pts.findLastIndex(p => p[0] <= date));
+
+const TEAMS = [['ETF', '--etf'], ['Azioni', '--azioni'], ['Crypto', '--crypto']];
+const TILTS = [-1.4, .9, -.5, 1.2, -1, .6, -.3]; // figurine attaccate a mano, un po' storte
+const teamVar = s => s.sold ? '--venduti' : (TEAMS.find(t => t[0] === s.type) ?? TEAMS[0])[1];
+
+let portfolio, prices, chart, updated;
+
+function stats(pos, i) {
+  const d = prices[pos.symbol];
+  // senza prezzo d'acquisto usa la chiusura di quel giorno
+  // "eur" = importo pagato come lo mostra Trade Republic, commissione di 1 € inclusa
+  const buys = pos.buys.map(b => {
+    const price = b.price ?? d.points[idxOn(d.points, b.date)][1];
+    const qty = b.qty ?? (b.eur - 1) / price;
+    return { ...b, price, qty, cost: b.eur ?? qty * price };
+  }).sort((a, b) => a.date.localeCompare(b.date));
+  const qty = sum(buys.map(b => b.qty));
+  const invested = sum(buys.map(b => b.cost));
+  const value = pos.sold ? pos.sold.eur : qty * d.price; // venduto: quanto hai incassato
+  return { ...d, no: i + 1, type: pos.type, name: pos.name ?? d.name, fullName: d.name, symbol: pos.symbol, sold: pos.sold,
+           buys, qty, invested, value, avg: invested / qty, gain: value - invested, gainPct: (value / invested - 1) * 100 };
+}
+
+// il "ritratto" della figurina: il prezzo da quando l'hai presa (fino alla vendita)
+function portrait(s) {
+  const pts = s.points, a = idxOn(pts, s.buys[0].date), b = s.sold ? idxOn(pts, s.sold.date) : pts.length - 1;
+  const seg = pts.slice(a, b + 1).map(p => p[1]);
+  const lo = Math.min(...seg, s.avg), hi = Math.max(...seg, s.avg);
+  const X = i => (i / Math.max(1, seg.length - 1) * 100).toFixed(2), Y = v => (56 - (v - lo) / (hi - lo || 1) * 50).toFixed(2);
+  const line = seg.map((v, i) => `${X(i)},${Y(v)}`).join(' ');
+  return `<svg viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+    <polygon class="area" points="0,60 ${line} 100,60"/><line class="avg" x1="0" x2="100" y1="${Y(s.avg)}" y2="${Y(s.avg)}"/>
+    <polyline class="line" points="${line}"/></svg>`;
+}
+
+function sticker(s, link = true) {
+  const tag = link ? 'a' : 'div';
+  return `<${tag} class="sticker${s.sold ? ' sold' : ''}" data-s="${esc(s.symbol)}" ${link ? `href="#/${encodeURIComponent(s.symbol)}"` : ''}
+    style="--team: var(${teamVar(s)}); --tilt: ${TILTS[(s.no - 1) % TILTS.length]}deg; --i: ${s.no}"
+    aria-label="${esc(`${s.name}${s.sold ? ', venduta' : ''}: ${money(s.value, s.currency)}, ${pct(s.gainPct)}`)}">
+    <span class="field"><span class="no">${String(s.no).padStart(2, '0')}</span>${s.sold ? '<span class="stamp">VENDUTA</span>' : ''}${portrait(s)}</span>
+    <span class="plate"><b>${esc(s.name)}</b><small>${esc(s.symbol)}</small></span>
+    <span class="nums"><span>${money(s.value, s.currency)}</span><span class="${cls(s.gain)}">${pct(s.gainPct)}</span></span>
+  </${tag}>`;
+}
+
+const fact = (k, v, c = '') => `<div><dt>${k}</dt><dd class="${c}">${v}</dd></div>`;
+const gainText = (g, p, cur) => `${money(g, cur, true)} · ${pct(p)}`;
+let entered = false;
+
+function showOverview() {
+  const all = portfolio.map(stats), held = all.filter(s => !s.sold), sold = all.filter(s => s.sold);
+  const teams = [...TEAMS.map(([name, v]) => [name, v, held.filter(s => s.type === name)]), ['Venduti', '--venduti', sold]]
+    .filter(t => t[2].length);
+  $('album').innerHTML = teams.map(([name, v, list]) => `
+    <section class="team" style="--team: var(${v}); --n4: ${Math.min(list.length, 4)}; --n2: ${Math.min(list.length, 2)}">
+      <h2 class="band">${name}<small>${list.length} ${list.length === 1 ? 'figurina' : 'figurine'}</small></h2>
+      <div class="grid">${list.map(s => sticker(s)).join('')}</div>
+    </section>`).join('');
+  $('album').classList.toggle('enter', !entered); // le figurine si "attaccano" solo alla prima apertura
+  entered = true;
+  // ponytail: somma senza cambio valuta, usa simboli in EUR (es. .DE) per totali corretti
+  const [value, invested] = [sum(held.map(s => s.value)), sum(held.map(s => s.invested))];
+  $('totals').innerHTML = `<h2>Scheda</h2><dl class="facts">
+    ${fact('Valore attuale', money(value, 'EUR'))}${fact('Investito', money(invested, 'EUR'))}
+    ${fact('Guadagno', gainText(value - invested, (value / invested - 1) * 100, 'EUR'), cls(value - invested))}
+    ${fact('Figurine', `${held.length} nell'album${sold.length ? ` · ${sold.length} ${sold.length === 1 ? 'venduta' : 'vendute'}` : ''}`)}
+    ${fact('Prezzi del', updated)}</dl>`;
+}
+
+function showDetail(symbol) {
+  const i = portfolio.findIndex(p => p.symbol === symbol);
+  if (i < 0) { $('d-name').textContent = 'Figurina non trovata'; return; }
+  const s = stats(portfolio[i], i), cur = s.currency, pts = s.points, first = s.buys[0], end = s.sold?.date;
+  const held = Math.round(((end ? Date.parse(end) : Date.now()) - Date.parse(first.date)) / 864e5);
+  const from = idxOn(pts, first.date), to = end ? idxOn(pts, end) : pts.length - 1, ref = end ? pts[to][1] : s.price;
+
+  $('d-sticker').innerHTML = sticker(s, false);
+  $('d-name').textContent = s.name;
+  $('d-sub').textContent = `${s.fullName} · ${s.symbol}`;
+  $('d-since').textContent = `In squadra dal ${day(first.date)}${end ? ` al ${day(end)}` : ''} · ${held} giorni`;
+  $('d-facts').innerHTML = end
+    ? fact('Investito', money(s.invested, cur)) + fact('Incassato alla vendita', money(s.value, cur))
+      + fact('Guadagno', gainText(s.gain, s.gainPct, cur), cls(s.gain)) + fact('Prezzo oggi', money(s.price, cur))
+    : fact('Prezzo attuale', money(s.price, cur)) + fact('Valore', money(s.value, cur))
+      + fact('Investito', money(s.invested, cur)) + fact('Guadagno', gainText(s.gain, s.gainPct, cur), cls(s.gain));
+  $('d-chart-card').style.setProperty('--team', `var(${teamVar(s)})`);
+  $('d-avg-label').textContent = `Tuo prezzo medio (${money(s.avg, cur)})`;
+  $('d-since-col').textContent = end ? 'Alla vendita' : 'Da allora';
+  $('d-buys').innerHTML = s.buys.map(b => `<tr><td>${day(b.date)}</td><td>${num(b.qty)}</td><td>${money(b.price, cur)}</td>
+    <td>${money(b.cost, cur)}</td><td class="${cls(ref - b.price)}">${pct((ref / b.price - 1) * 100)}</td></tr>`).join('')
+    + (end ? `<tr class="sale"><td>Vendita ${day(end)}</td><td>${num(s.qty)}</td><td>${money(ref, cur)}</td>
+    <td>${money(s.value, cur)}</td><td class="${cls(s.gain)}">${pct(s.gainPct)}</td></tr>` : '');
+
+  const inside = i => i >= from && i <= to;
+  const marks = new Map(); // pallini sul grafico: indice -> righe del tooltip
+  const mark = (date, text) => { const i = idxOn(pts, date); marks.set(i, [...(marks.get(i) ?? []), text]); };
+  s.buys.forEach(b => mark(b.date, `Acquisto: ${num(b.qty)} × ${money(b.price, cur)}`));
+  if (end) mark(end, `Vendita: incassati ${money(s.value, cur)}`);
+  const [ink, ink2, ink3, rule, paper] = ['--ink', '--ink-2', '--ink-3', '--rule', '--paper'].map(css);
+  const band = css(teamVar(s)) + '66';
+  $('chart').setAttribute('aria-label', `Andamento di ${s.name}: prezzo medio ${money(s.avg, cur)}, oggi ${money(s.price, cur)}`);
+
+  chart?.destroy();
+  chart = new Chart($('chart'), {
+    type: 'line',
+    data: {
+      labels: pts.map(p => p[0]),
+      datasets: [
+        { data: pts.map(p => p[1]), borderWidth: 2.5, borderJoinStyle: 'round', tension: 0,
+          segment: { borderColor: c => c.p0DataIndex >= from && c.p0DataIndex < to ? ink : ink3 },
+          pointRadius: c => marks.has(c.dataIndex) ? 6 : 0, pointHoverRadius: 6,
+          pointBackgroundColor: ink, pointBorderColor: paper, pointBorderWidth: 2.5 },
+        { data: pts.map(() => s.avg), borderColor: ink2, borderWidth: 1.5, borderDash: [5, 5], pointRadius: 0, pointHoverRadius: 0 },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false, animation: false, layout: { padding: { top: 26 } },
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: { grid: { display: false }, border: { color: rule }, ticks: { color: ink2, maxRotation: 0, autoSkip: true, maxTicksLimit: innerWidth < 600 ? 4 : 7,
+             callback(v) { return new Date(this.getLabelForValue(v)).toLocaleDateString('it-IT', { month: 'short', year: 'numeric' }); } } },
+        y: { grid: { color: rule }, border: { display: false }, ticks: { color: ink2, callback: v => money(v, cur) } },
+      },
+      plugins: {
+        legend: { display: false },
+        band: { from, to, label: end ? 'Quando la possedevi' : 'Da quando la possiedi', color: band, ink, line: ink3 },
+        tooltip: {
+          filter: i => i.datasetIndex === 0, displayColors: false,
+          backgroundColor: ink, padding: 12, cornerRadius: 4,
+          titleFont: { family: 'Barlow Condensed', weight: '800', size: 16 }, bodyFont: { family: 'Barlow', size: 13 },
+          callbacks: {
+            title: i => day(i[0].label),
+            label: i => 'Prezzo: ' + money(i.raw, cur),
+            afterLabel: i => [
+              ...(inside(i.dataIndex) ? ['Rispetto al tuo prezzo medio: ' + pct((i.raw / s.avg - 1) * 100)] : []),
+              ...(marks.get(i.dataIndex) ?? []),
+            ],
+          },
+        },
+      },
+    },
+    plugins: [{
+      id: 'band',
+      beforeDatasetsDraw(c, _, o) { // fascia evidenziata dal primo acquisto a oggi (o alla vendita)
+        const { ctx, chartArea: a, scales: { x } } = c, x0 = x.getPixelForValue(o.from), x1 = x.getPixelForValue(o.to);
+        ctx.save();
+        ctx.fillStyle = o.color; ctx.fillRect(x0, a.top, x1 - x0, a.bottom - a.top);
+        ctx.fillStyle = o.ink; ctx.font = '800 15px "Barlow Condensed", sans-serif';
+        // etichetta sopra il grafico, così non copre mai la linea del prezzo
+        const t = o.label.toUpperCase(), w = ctx.measureText(t).width;
+        ctx.fillText(t, x0 + w <= c.width - 4 ? x0 : Math.max(a.left, x1 - w), a.top - 9);
+        ctx.restore();
+      },
+      afterDatasetsDraw(c, _, o) { // linea verticale sotto il cursore
+        const t = c.tooltip;
+        if (!t?.getActiveElements().length) return;
+        const { ctx, chartArea: a } = c;
+        ctx.save(); ctx.strokeStyle = o.line; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(t.caretX, a.top); ctx.lineTo(t.caretX, a.bottom); ctx.stroke();
+        ctx.restore();
+      },
+    }],
+  });
+}
+
+const current = () => decodeURIComponent(location.hash.slice(2));
+
+function route() {
+  const symbol = current();
+  $('overview').hidden = !!symbol;
+  $('detail').hidden = !symbol;
+  scrollTo(0, 0);
+  symbol ? showDetail(symbol) : showOverview();
+}
+
+// la figurina toccata "vola" nella scheda (e torna al suo posto quando chiudi)
+let last = '';
+function navigate() {
+  const next = current(), who = next || last;
+  const tag = () => document.querySelectorAll('#album .sticker').forEach(el =>
+    el.style.viewTransitionName = el.dataset.s === who ? 'sticker' : '');
+  last = who;
+  if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return route();
+  tag();
+  document.startViewTransition(() => { route(); tag(); });
+}
+
+// prices.json lo genera GitHub Actions (aggiorna_prezzi.py) a ogni pubblicazione
+Promise.all([...['portfolio.json', 'prices.json'].map(f => fetch(f, { cache: 'no-store' }).then(r => r.json())), document.fonts.ready])
+  .then(([p, pr]) => {
+    [portfolio, prices] = [p, pr.prices];
+    updated = new Date(pr.updated).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    Chart.defaults.font.family = 'Barlow, system-ui, sans-serif';
+    addEventListener('hashchange', navigate);
+    route();
+  })
+  .catch(e => { $('error').hidden = false; $('error').textContent = 'Non riesco a leggere i dati: ' + e.message; });
+</script>
+</body>
+</html>

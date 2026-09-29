@@ -1,0 +1,23 @@
+[
+  { "symbol": "VWCE.DE", "type": "ETF", "name": "FTSE All-World", "buys": [{ "date": "2026-04-28", "eur": 1001 }] },
+  { "symbol": "LYP6.DE", "type": "ETF", "name": "Stoxx Europe 600", "buys": [{ "date": "2026-04-29", "eur": 251 }] },
+  { "symbol": "SXR8.DE", "type": "ETF", "name": "S&P 500", "buys": [{ "date": "2026-05-28", "eur": 251 }] },
+  { "symbol": "PPFB.DE", "type": "ETF", "name": "Oro fisico", "buys": [{ "date": "2026-04-28", "eur": 101 }] },
+  {
+    "symbol": "PST.MI",
+    "type": "Azioni",
+    "name": "Poste Italiane",
+    "buys": [
+      { "date": "2026-05-29", "eur": 101.2 },
+      { "date": "2026-08-19", "eur": 101.23 }
+    ]
+  },
+  {
+    "symbol": "NVD.DE",
+    "type": "Azioni",
+    "name": "NVIDIA",
+    "buys": [{ "date": "2026-04-28", "eur": 101 }],
+    "sold": { "date": "2026-08-19", "eur": 102.82 }
+  },
+  { "symbol": "BTC-EUR", "type": "Crypto", "name": "Bitcoin", "buys": [{ "date": "2026-04-29", "eur": 50.98 }] }
+]

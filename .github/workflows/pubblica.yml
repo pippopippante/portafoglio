@@ -1,0 +1,33 @@
+name: Aggiorna prezzi e pubblica
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6-21 * * 1-5" # ogni ora dal lunedì al venerdì, 8-23 ora italiana (UTC)
+  workflow_dispatch: # pulsante "Run workflow" per aggiornare a mano
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 aggiorna_prezzi.py
+      - run: mkdir _site && cp index.html portfolio.json prices.json _site/ # online va solo il sito
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v5
