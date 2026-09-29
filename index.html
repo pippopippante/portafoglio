@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600;700&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="dati.js"></script>
 <style>
   :root {
     color-scheme: light;
@@ -377,11 +378,12 @@ function navigate() {
   document.startViewTransition(() => { route(); tag(); });
 }
 
-// prices.json lo genera GitHub Actions (aggiorna_prezzi.py) a ogni pubblicazione
-Promise.all([...['portfolio.json', 'prices.json'].map(f => fetch(f, { cache: 'no-store' }).then(r => r.json())), document.fonts.ready])
-  .then(([p, pr]) => {
-    [portfolio, prices] = [p, pr.prices];
-    updated = new Date(pr.updated).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+// dati.js lo genera aggiorna_prezzi.py (su GitHub Actions a ogni pubblicazione)
+document.fonts.ready
+  .then(() => {
+    if (!window.DATI) throw new Error('manca il file dati.js');
+    ({ portfolio, prices } = DATI);
+    updated = new Date(DATI.updated).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
     Chart.defaults.font.family = 'Barlow, system-ui, sans-serif';
     addEventListener('hashchange', navigate);
     route();

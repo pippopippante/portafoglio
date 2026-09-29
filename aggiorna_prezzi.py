@@ -1,4 +1,5 @@
-"""Scarica da Yahoo Finance i prezzi dei titoli in portfolio.json e li salva in prices.json.
+"""Scarica da Yahoo Finance i prezzi dei titoli in portfolio.json e scrive dati.js (portafoglio + prezzi).
+È uno script e non un .json così index.html funziona anche aperto col doppio clic, senza server.
 Lo lancia GitHub Actions: se un titolo fallisce, la pubblicazione si ferma e resta online la versione precedente."""
 import datetime as dt
 import json
@@ -24,15 +25,18 @@ def chart(symbol, since):
     }
 
 
-prices = {}
 with open("portfolio.json", encoding="utf-8") as f:
-    for pos in json.load(f):
-        first = min(dt.date.fromisoformat(b["date"]) for b in pos["buys"])
-        try:
-            prices[pos["symbol"]] = chart(pos["symbol"], first - dt.timedelta(days=365))  # un anno di contesto prima
-        except Exception as e:
-            raise SystemExit(f"{pos['symbol']}: {e}")
+    portfolio = json.load(f)
 
-with open("prices.json", "w", encoding="utf-8") as f:
-    json.dump({"updated": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "prices": prices}, f)
+prices = {}
+for pos in portfolio:
+    first = min(dt.date.fromisoformat(b["date"]) for b in pos["buys"])
+    try:
+        prices[pos["symbol"]] = chart(pos["symbol"], first - dt.timedelta(days=365))  # un anno di contesto prima
+    except Exception as e:
+        raise SystemExit(f"{pos['symbol']}: {e}")
+
+dati = {"updated": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "portfolio": portfolio, "prices": prices}
+with open("dati.js", "w", encoding="utf-8") as f:
+    f.write("window.DATI = " + json.dumps(dati, ensure_ascii=False) + ";\n")
 print("Aggiornati:", ", ".join(prices))

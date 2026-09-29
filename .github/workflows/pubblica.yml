@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: python3 aggiorna_prezzi.py
-      - run: mkdir _site && cp index.html portfolio.json prices.json _site/ # online va solo il sito
+      - run: mkdir _site && cp index.html dati.js _site/ # online va solo il sito
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
