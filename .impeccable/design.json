@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-29T12:43:21+00:00",
+  "title": "Design System: Il mio portafoglio",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "primary",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.01 265)",
+          "oklch(25% 0.01 265)",
+          "oklch(35% 0.01 265)",
+          "oklch(45% 0.01 265)",
+          "oklch(55% 0.01 265)",
+          "oklch(68% 0.01 265)",
+          "oklch(82% 0.01 265)",
+          "oklch(95% 0.01 265)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "tonalRamp": [
+          "oklch(15% 0.015 265)",
+          "oklch(25% 0.015 265)",
+          "oklch(35% 0.015 265)",
+          "oklch(45% 0.015 265)",
+          "oklch(55% 0.015 265)",
+          "oklch(68% 0.015 265)",
+          "oklch(82% 0.015 265)",
+          "oklch(95% 0.015 265)"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3 (graphics only)",
+        "tonalRamp": [
+          "oklch(15% 0.015 265)",
+          "oklch(25% 0.015 265)",
+          "oklch(35% 0.015 265)",
+          "oklch(45% 0.015 265)",
+          "oklch(55% 0.015 265)",
+          "oklch(68% 0.015 265)",
+          "oklch(82% 0.015 265)",
+          "oklch(95% 0.015 265)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "tonalRamp": [
+          "oklch(15% 0.008 265)",
+          "oklch(25% 0.008 265)",
+          "oklch(35% 0.008 265)",
+          "oklch(45% 0.008 265)",
+          "oklch(55% 0.008 265)",
+          "oklch(68% 0.008 265)",
+          "oklch(82% 0.008 265)",
+          "oklch(95% 0.008 265)"
+        ]
+      },
+      "raise": {
+        "role": "neutral",
+        "displayName": "Raise",
+        "tonalRamp": [
+          "oklch(15% 0.005 265)",
+          "oklch(25% 0.005 265)",
+          "oklch(35% 0.005 265)",
+          "oklch(45% 0.005 265)",
+          "oklch(55% 0.005 265)",
+          "oklch(68% 0.005 265)",
+          "oklch(82% 0.005 265)",
+          "oklch(95% 0.005 265)"
+        ]
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Ground",
+        "tonalRamp": [
+          "oklch(15% 0.0 265)",
+          "oklch(25% 0.0 265)",
+          "oklch(35% 0.0 265)",
+          "oklch(45% 0.0 265)",
+          "oklch(55% 0.0 265)",
+          "oklch(68% 0.0 265)",
+          "oklch(82% 0.0 265)",
+          "oklch(95% 0.0 265)"
+        ]
+      },
+      "up": {
+        "role": "success",
+        "displayName": "Gain",
+        "tonalRamp": [
+          "oklch(15% 0.13 155)",
+          "oklch(25% 0.13 155)",
+          "oklch(35% 0.13 155)",
+          "oklch(45% 0.13 155)",
+          "oklch(55% 0.13 155)",
+          "oklch(68% 0.13 155)",
+          "oklch(82% 0.13 155)",
+          "oklch(95% 0.13 155)"
+        ]
+      },
+      "down": {
+        "role": "error",
+        "displayName": "Loss",
+        "tonalRamp": [
+          "oklch(15% 0.17 22)",
+          "oklch(25% 0.17 22)",
+          "oklch(35% 0.17 22)",
+          "oklch(45% 0.17 22)",
+          "oklch(55% 0.17 22)",
+          "oklch(68% 0.17 22)",
+          "oklch(82% 0.17 22)",
+          "oklch(95% 0.17 22)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "The portfolio value or security price; decimals in a small at 0.55em."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Security name on its page."
+      },
+      "section": {
+        "displayName": "Section",
+        "purpose": "Section headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Rows and values, tabular figures."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Labels, column heads, legend, footnote."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "View Transition moving the row name into the title, .35s."
+      },
+      {
+        "name": "hover-tint",
+        "value": "background-color .2s",
+        "purpose": "Row and range pill hover."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "720px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Range pills",
+      "kind": "chip",
+      "refersTo": "range-button",
+      "description": "Chart period buttons; only ranges shorter than the data, plus Max.",
+      "html": "<div class=\"ds-ranges\"><button class=\"ds-range\">1M</button><button class=\"ds-range\">3M</button><button class=\"ds-range\" aria-pressed=\"true\">Max</button></div>",
+      "css": ".ds-ranges{display:flex;gap:4px}.ds-range{font:600 13px/1 'Hanken Grotesk',system-ui,sans-serif;color:var(--ink-2,#5b616e);background:none;border:0;border-radius:999px;padding:9px 14px;cursor:pointer;transition:background-color .2s,color .2s}.ds-range:hover{color:var(--ink,#0d0f14)}.ds-range[aria-pressed=true]{background:var(--raise,#f2f3f5);color:var(--ink,#0d0f14)}.ds-range:focus-visible{outline:2px solid var(--ink,#0d0f14);outline-offset:3px}"
+    },
+    {
+      "name": "Position row",
+      "kind": "custom",
+      "refersTo": "position-row",
+      "description": "Whole-row link: name and type/symbol, value, return in euro with %.",
+      "html": "<a class=\"ds-row\" href=\"#\"><span><b>FTSE All-World</b><small>ETF · VWCE.DE</small></span><span><b>1.112,11 €</b></span><span class=\"ds-up\"><b>+111,11 €</b><small>+11,10%</small></span></a>",
+      "css": ".ds-row{display:grid;grid-template-columns:minmax(0,2fr) 1fr 1fr;gap:16px;align-items:center;padding:14px 12px;border-radius:10px;color:var(--ink,#0d0f14);text-decoration:none;font:15px/1.5 'Hanken Grotesk',system-ui,sans-serif;font-variant-numeric:tabular-nums;transition:background-color .2s}.ds-row:hover{background:var(--raise,#f2f3f5)}.ds-row>:not(:first-child){text-align:right}.ds-row b{display:block;font-weight:600}.ds-row small{display:block;font-size:13px;color:var(--ink-2,#5b616e)}.ds-up,.ds-up small{color:var(--up,#0a7c43)}"
+    },
+    {
+      "name": "Header figure",
+      "kind": "custom",
+      "refersTo": "figure",
+      "description": "Big value with small decimals and the colored delta line; follows the finger on the chart.",
+      "html": "<div class=\"ds-fig\"><p class=\"ds-big\">1.991<small>,24 €</small></p><p class=\"ds-delta\"><span class=\"ds-up\">+133,83 € · +7,21%</span> <span class=\"ds-when\">in totale</span></p></div>",
+      "css": ".ds-fig{font-family:'Hanken Grotesk',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink,#0d0f14)}.ds-big{margin:0;font-size:54px;font-weight:600;letter-spacing:-.035em;line-height:1.05}.ds-big small{font-size:.55em;letter-spacing:-.01em}.ds-delta{margin:6px 0 0;font-weight:500}.ds-up{color:var(--up,#0a7c43)}.ds-when{color:var(--ink-2,#5b616e);font-weight:400}"
+    },
+    {
+      "name": "Stats band",
+      "kind": "card",
+      "refersTo": "stats",
+      "description": "Definition list between two hairlines.",
+      "html": "<dl class=\"ds-stats\"><div><dt>Investito</dt><dd>1.857,41 €</dd></div><div><dt>Guadagno totale</dt><dd class=\"ds-up\">+133,83 € · +7,21%</dd></div></dl>",
+      "css": ".ds-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 24px;margin:0;padding:20px 0;border-block:1px solid var(--rule,#e7e9ed);font-family:'Hanken Grotesk',system-ui,sans-serif;font-variant-numeric:tabular-nums}.ds-stats dt{color:var(--ink-2,#5b616e);font-size:13px}.ds-stats dd{margin:2px 0 0;font-size:17px;font-weight:600}.ds-up{color:var(--up,#0a7c43)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The broker's own screen",
+    "overview": "The site looks like the owner's broker app (Trade Republic), with the column discipline of a bank statement. One big number at the top, a clean line chart under it, and positions as ruled rows. Nothing decorates the data: no cards, no shadows, no illustration. Color exists only to say gain or loss. The theme follows the phone: light is the default because dark text on a light ground reads better, and dark matches the broker app at night.",
+    "keyCharacteristics": [
+      "A big figure whose decimals are set smaller, and which follows the finger on the chart.",
+      "Monochrome ink line charts with no tooltip box: the header is the readout.",
+      "Ruled rows, right-aligned tabular figures, a true minus sign.",
+      "Light and dark from the same tokens, switched by `prefers-color-scheme`."
+    ],
+    "rules": [
+      {
+        "name": "The Sign Rule",
+        "body": "Gain and loss always carry a `+` or a true minus `−` as well as their color; color is never the only signal.",
+        "section": "colors"
+      },
+      {
+        "name": "The Money-Only Color Rule",
+        "body": "Green and red are reserved for gain and loss. Nothing else on the page has a hue.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "`font-variant-numeric: tabular-nums` on the whole body; every number column is right-aligned.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "**Do** let the header figure be the chart readout.",
+      "**Do** show the invested line on any portfolio value chart, so deposits never read as gains.",
+      "**Do** keep estimates labeled as estimates (Quote (stima), the footnote)."
+    ],
+    "donts": [
+      "**Don't** add cards, shadows, gradients or icons beside the data.",
+      "**Don't** use green or red for anything other than gain and loss.",
+      "**Don't** set punctuation tabular: a font whose `tnum` widens `.` and `,` makes figures look typed."
+    ]
+  }
+}

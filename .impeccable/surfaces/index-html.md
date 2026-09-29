@@ -1,24 +1,25 @@
 ---
-version: 1
+version: 2
 slug: "index-html"
 primary_target: "index.html"
 related_targets: []
 ---
 
-Scope: index.html (album + sticker detail). Mode: Operate. Audience: the owner, from phone and PC, in Italian. Task: see how each security is doing since they bought it.
+Scope: index.html (portfolio overview + security page). Mode: Operate. Audience: the owner, mostly from the phone, in Italian. Task: see how the whole portfolio and each security are doing since they were bought.
+
+The owner rejected the Panini sticker album as amateurish and asked for "molto broker e finanziario". They were unsure between Trade Republic, Bloomberg terminal and private bank, and left the choice open: the standing exit (category standard) was taken, with Trade Republic as the reference.
 
 ## Direction contract
 
-THESIS: the portfolio as a Panini sticker album. Each holding is a sticker, and its portrait is the price trace since the purchase. The page refuses the black fintech dashboard with neon green/red.
+THESIS: the portfolio as the owner's own broker screen: one figure, one chart, ruled rows. It refuses decoration, cards and any color that is not gain or loss.
 
-OWN-WORLD: album page printed in ultramarine blue with a fine halftone; glossy white stickers with slightly rounded corners, each stuck on with a small tilt; the "photo" field is in the team color (ETF yellow, Azioni orange, Crypto lilac, Venduti gray) with a navy trace; navy name plate with Barlow Condensed caps; info panels in white with dotted leaders; Barlow for the numbers, with tabular figures.
+OWN-WORLD: white (or black, following the phone) ground; ink figures in Hanken Grotesk with tabular digits and small decimals; monochrome line charts with a dashed ink-3 companion line; green/red only for money, always with a sign; hairline rules; pill range buttons.
 
-STORY: from the album you see what you own and how it's doing; you tap a sticker and it grows into the card with the full chart and the holding period highlighted.
+STORY: the owner opens it, reads the total and how much it earned, drags a finger on the chart to see any day, then taps a row to see that security with the holding period highlighted.
 
-FIRST VIEWPORT: big white title on the blue page, portfolio card with dotted leaders (value, invested, gain, stickers, updated) beside it or below on mobile; then the ETF team band with the first row of stickers already visible.
+FIRST VIEWPORT: "Il mio portafoglio" label, the value at 38–54px, the gain line in color, then the value-vs-invested chart filling the width, the range pills under it. On desktop the stats band is also in view.
 
-FORM: list position 7 of 7 (Panini album), seed c734891e.
-Raises: tabular figures on a fixed decimal column (from the nixie counter); color confined to the fields and bands, text always in ink (from the iridescent cloud); the sticker number as the dominant numeral (from the precisionist plate).
-Signature interaction: a View Transition in which the tapped sticker becomes the big one on the card.
+FORM: category standard (canon, user choice), reference Trade Republic; no concept-seed roll.
+Signature interaction: the header figure follows the finger on the chart; the tapped row's name morphs into the security title.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

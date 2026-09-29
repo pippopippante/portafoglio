@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Static HTML/CSS/JS in a single index.html (Chart.js from a CDN), hosted on GitHub Pages. A GitHub Action (aggiorna_prezzi.py) fetches prices from Yahoo Finance and writes prices.json at every publish, hourly Monday to Friday. The user explicitly does not want a program running locally.
+Static HTML/CSS/JS in a single index.html (Chart.js from a CDN), hosted on GitHub Pages. A GitHub Action (aggiorna_prezzi.py) fetches prices from Yahoo Finance and writes dati.js at every publish, hourly Monday to Friday. The user explicitly does not want a program running locally.
 
 ## Users
 
@@ -28,7 +28,8 @@ The owner opens the site now and then to check how things are going, mostly on t
 
 ## Capabilities and Constraints
 
-- Home page: totals (current value, invested, gain), a table of current holdings, a table of sold securities.
+- Home page: current value with the total gain, a chart of portfolio value against money invested (range 1M/3M/Max), a table of current holdings with weight and return, a table of sold securities.
+- Dragging on any chart shows that day's figures in the header.
 - Detail page per security: chart from one year before the first buy to today, holding period highlighted, a dot on each buy and sale, a line at the average price, the list of buys.
 - Prices are daily closes plus the last price at update time; the page shows when they were last updated.
 - Quantities are estimated from the amount paid and that day's closing price (€1 fee included in the amount invested).
@@ -43,3 +44,8 @@ Real holdings in portfolio.json (VWCE, iShares Physical Gold, Amundi Stoxx Europ
 - The truth of the numbers comes before anything else: never figures that look more precise than they are.
 - Gain or loss must be readable instantly, and never by color alone.
 - It is a private tool: no marketing, no onboarding, no decoration getting in the way of the data.
+
+## Brand Commitments
+
+- The look is a broker app's (reference: Trade Republic), played straight. The owner rejected the sticker-album concept as amateurish.
+- Light or dark follows the phone's setting.
