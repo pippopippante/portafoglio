@@ -18,6 +18,8 @@ colors:
   rule-dark: "#1f2228"
   up-dark: "#3ccb82"
   down-dark: "#ff6b70"
+  compare: "#2f63f0"
+  compare-dark: "#7c9cff"
 typography:
   figure:
     fontFamily: "Hanken Grotesk, system-ui, sans-serif"
@@ -96,11 +98,12 @@ The site looks like the owner's broker app (Trade Republic), with the column dis
 - **Rule** (`#e7e9ed` / dark `#1f2228`): hairlines between rows and around the stats band, chart grid.
 
 ### Semantic
-- **Up** (`#0a7c43` / dark `#3ccb82`) and **Down** (`#c8303b` / dark `#ff6b70`), with 13–16% fills of the same hue between the value and invested lines.
+- **Up** (`#0a7c43` / dark `#3ccb82`) and **Down** (`#c8303b` / dark `#ff6b70`), with 14–20% fills of the same hue fading to transparent under the chart line.
+- **Compare** (`#2f63f0` / dark `#7c9cff`): only the second line of a comparison, its swatch and the compare pill when active.
 
 ### Named Rules
 **The Sign Rule.** Gain and loss always carry a `+` or a true minus `−` as well as their color; color is never the only signal.
-**The Money-Only Color Rule.** Green and red are reserved for gain and loss. Nothing else on the page has a hue.
+**The Money-Only Color Rule.** Green and red are reserved for gain and loss. The only other hue is the comparison blue.
 
 ## Typography
 
@@ -142,9 +145,12 @@ A whole-row link on a CSS grid set by `--cols`: name (600) with `type · symbol`
 A `<dl>` grid between two hairlines: caption label, 17px/600 value.
 
 ### Charts (signature)
-Chart.js line, no animation, no tooltip box. Dragging a finger or the mouse moves a crosshair and dot, and the header figure and delta line show that day. `touch-action: none` on the canvas so the page does not scroll under the finger.
-- **Portfolio:** value in ink, invested as a dashed ink 3 step line, green fill where value is above invested and red where below. Sold positions leave both lines on the day of sale.
-- **Security:** price in ink inside the holding period and ink 3 outside, holding period as a faint band with an uppercase 11px caption above the plot, dashed average price, a dot on each buy and sale.
+Chart.js line, no animation, no tooltip box, no grid, no y axis. Dragging a finger or the mouse moves a crosshair and dots, and the header figure and delta line show that moment; the delta line is fixed at one line height (nowrap, ellipsis) so nothing below it moves. `touch-action: none` on the canvas.
+- **Periods:** 1G 1S (15-minute prices) and 1M 3M 6M 1A Max (daily closes); only periods the data covers are shown. X labels sit at the start of each hour, day or month.
+- **Line color:** green or red by the change over the period, with a gradient of the same hue underneath. The y range hugs the data; the period high and low are written on the chart, and dashed reference lines carry their label at the right end. Canvas labels have a 4px halo in the ground color.
+- **Portfolio:** value line plus invested as a dashed ink 3 step line (daily periods only). Sold positions leave both on the day of sale.
+- **Security:** price line in color inside the holding period with the gradient only there, ink 3 outside; dashed average price (daily periods only); a dot on each buy and sale, and while the finger is on it the event is written above the plot, not in the header.
+- **Compare:** a native select ("Confronta con…": own securities, then indices and other stocks from `confronti.json`). Both lines switch to % from the start of the period, main in ink, comparison in blue, dotted 0% baseline. The portfolio uses a time-weighted return so deposits never count as gains.
 
 ### Name transition
 A View Transition moves the tapped row's name into the security title and back.
@@ -152,7 +158,7 @@ A View Transition moves the tapped row's name into the security title and back.
 ## Do's and Don'ts
 
 ### Do:
-- **Do** let the header figure be the chart readout.
+- **Do** let the header figure be the chart readout, and keep the header the same height while scrubbing.
 - **Do** show the invested line on any portfolio value chart, so deposits never read as gains.
 - **Do** keep estimates labeled as estimates (Quote (stima), the footnote).
 

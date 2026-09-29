@@ -1,0 +1,15 @@
+[
+  { "symbol": "EUNL.DE", "name": "MSCI World" },
+  { "symbol": "^STOXX50E", "name": "Euro Stoxx 50" },
+  { "symbol": "FTSEMIB.MI", "name": "FTSE MIB" },
+  { "symbol": "^GDAXI", "name": "DAX" },
+  { "symbol": "SXRV.DE", "name": "Nasdaq 100" },
+  { "symbol": "APC.DE", "name": "Apple" },
+  { "symbol": "MSF.DE", "name": "Microsoft" },
+  { "symbol": "AMZ.DE", "name": "Amazon" },
+  { "symbol": "TL0.DE", "name": "Tesla" },
+  { "symbol": "RACE.MI", "name": "Ferrari" },
+  { "symbol": "ENEL.MI", "name": "Enel" },
+  { "symbol": "ENI.MI", "name": "Eni" },
+  { "symbol": "ISP.MI", "name": "Intesa Sanpaolo" }
+]

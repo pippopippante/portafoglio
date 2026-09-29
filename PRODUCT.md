@@ -28,10 +28,11 @@ The owner opens the site now and then to check how things are going, mostly on t
 
 ## Capabilities and Constraints
 
-- Home page: current value with the total gain, a chart of portfolio value against money invested (range 1M/3M/Max), a table of current holdings with weight and return, a table of sold securities.
-- Dragging on any chart shows that day's figures in the header.
+- Home page: current value with the total gain, a chart of portfolio value against money invested (periods 1G/1S/1M/3M/Max), a table of current holdings with weight and return, a table of sold securities.
+- Dragging on any chart shows that moment's figures in the header.
+- Every chart can be compared with another security (own holdings, or the indices and stocks in confronti.json, downloaded by the hourly update): both lines in % from the start of the period.
 - Detail page per security: chart from one year before the first buy to today, holding period highlighted, a dot on each buy and sale, a line at the average price, the list of buys.
-- Prices are daily closes plus the last price at update time; the page shows when they were last updated.
+- Prices are daily closes plus 15-minute prices for the last 8 days (for 1G and 1S), as of the last hourly update; the page shows when that was.
 - Quantities are estimated from the amount paid and that day's closing price (€1 fee included in the amount invested).
 - Totals are summed in EUR, with no currency conversion.
 
