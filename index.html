@@ -101,6 +101,7 @@
   .legend i.avg { border-top: 1.5px dashed var(--ink-2); }
   .legend i.hold { height: 13px; border: 0; background: var(--team); }
   .plot { position: relative; height: 380px; }
+  .plot canvas { touch-action: none; } /* il dito sul grafico muove il cursore, non la pagina */
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
   th, td { padding: 11px 8px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--rule); }
   th:first-child, td:first-child { text-align: left; }
