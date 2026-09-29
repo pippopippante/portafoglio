@@ -379,12 +379,24 @@ function navigate() {
   document.startViewTransition(() => { route(); tag(); });
 }
 
+// il Bitcoin si scambia anche nel weekend: all'apertura prende il prezzo del momento da Coinbase.
+// ponytail: solo BTC, Yahoo e le borse non si lasciano leggere dal browser; per gli altri servirebbe un proxy
+const btc = fetch('https://api.coinbase.com/v2/prices/BTC-EUR/spot', { signal: AbortSignal.timeout?.(3000) })
+  .then(r => r.json()).then(j => +j.data.amount).catch(() => 0);
+
 // dati.js lo genera aggiorna_prezzi.py (su GitHub Actions a ogni pubblicazione)
-document.fonts.ready
-  .then(() => {
+Promise.all([document.fonts.ready, btc])
+  .then(([, live]) => {
     if (!window.DATI) throw new Error('manca il file dati.js');
     ({ portfolio, prices } = DATI);
     updated = new Date(DATI.updated).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const b = prices['BTC-EUR'];
+    if (b && live > 0) {
+      const today = new Date().toISOString().slice(0, 10), end = b.points.at(-1); // date in UTC, come Yahoo per le crypto
+      end[0] === today ? end[1] = live : b.points.push([today, live]);
+      b.price = live;
+      updated += ' · Bitcoin in diretta';
+    }
     Chart.defaults.font.family = 'Barlow, system-ui, sans-serif';
     addEventListener('hashchange', navigate);
     route();
